@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* Dark is the default theme */
+:root {
+  color-scheme: dark;
+  --bg: #050b1a;
+  --bg-alt: #0b1428;
+  --surface: #0d1730;
+  --surface-2: #14213f;
+  --border: rgba(255, 255, 255, 0.08);
+  --fg: #f4f7fc;
+  --muted: #93a4c4;
+  --brand: #f6a623;
+  --brand-fg: #1a1204;
+  --accent-text: #f6a623;
+  --ok: #34d399;
+  --bad: #f87171;
+  --hero-from: #0a1630;
+  --hero-to: #1c3a7c;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f7f9fd;
+  --bg-alt: #eaf0fa;
+  --surface: #ffffff;
+  --surface-2: #f1f5fb;
+  --border: rgba(10, 20, 50, 0.1);
+  --fg: #0b1530;
+  --muted: #53627f;
+  --brand: #f6a623;
+  --brand-fg: #1a1204;
+  --accent-text: #b86e00;
+  --ok: #059669;
+  --bad: #dc2626;
+  --hero-from: #e8f0ff;
+  --hero-to: #c9dafc;
+}
+
+/* Maps the variables to Tailwind classes: bg-bg, bg-surface, text-fg, text-muted, border-line, bg-brand ... */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-alt: var(--bg-alt);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--border);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-fg: var(--brand-fg);
+  --color-accent: var(--accent-text);
+  --color-ok: var(--ok);
+  --color-bad: var(--bad);
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
