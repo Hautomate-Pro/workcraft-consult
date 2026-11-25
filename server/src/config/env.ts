@@ -3,7 +3,9 @@ import dotenv from "dotenv";
 import { z } from "zod";
 
 // Loads <repo root>/.env locally. On Vercel the dashboard variables are used instead.
-dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (!process.env.VERCEL) {
+  dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+}
 
 const blankToUndefined = (v: unknown) =>
   typeof v === "string" && v.trim() === "" ? undefined : v;
