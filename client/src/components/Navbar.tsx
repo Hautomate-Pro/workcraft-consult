@@ -1,13 +1,25 @@
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { navLinks, siteContent } from "../content";
+import { useAuth } from "../lib/auth";
 import { Button } from "./Button";
 import { Container } from "./Container";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const areaPath = user?.role === "admin" ? "/admin" : "/dashboard";
+  const areaLabel = user?.role === "admin" ? "Admin" : "Dashboard";
+
+  async function handleSignOut() {
+    setMenuOpen(false);
+    await signOut();
+    navigate("/");
+  }
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `rounded-md px-2 py-2 text-sm font-semibold transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand ${isActive ? "text-accent" : "text-muted"}`;
@@ -33,9 +45,24 @@ export function Navbar() {
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <ThemeToggle />
-          <Link to="/learner-portal" className="px-2 text-sm font-semibold text-muted transition hover:text-accent">
-            Learner portal
-          </Link>
+          {user ? (
+            <>
+              <Link to={areaPath} className="px-2 text-sm font-semibold text-muted transition hover:text-accent">
+                {areaLabel}
+              </Link>
+              <button
+                type="button"
+                onClick={handleSignOut}
+                className="px-2 text-sm font-semibold text-muted transition hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <Link to="/learner-portal" className="px-2 text-sm font-semibold text-muted transition hover:text-accent">
+              Learner portal
+            </Link>
+          )}
           <Button to="/register-interest" className="min-h-10 px-3 py-2 text-xs">
             Register interest
           </Button>
@@ -72,9 +99,24 @@ export function Navbar() {
                 {link.label}
               </NavLink>
             ))}
-            <Link to="/learner-portal" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-3 text-sm font-semibold text-fg hover:bg-surface">
-              Learner portal
-            </Link>
+            {user ? (
+              <>
+                <Link to={areaPath} onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-3 text-sm font-semibold text-fg hover:bg-surface">
+                  {areaLabel}
+                </Link>
+                <button
+                  type="button"
+                  onClick={handleSignOut}
+                  className="rounded-lg px-3 py-3 text-left text-sm font-semibold text-fg hover:bg-surface"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <Link to="/learner-portal" onClick={() => setMenuOpen(false)} className="rounded-lg px-3 py-3 text-sm font-semibold text-fg hover:bg-surface">
+                Learner portal
+              </Link>
+            )}
             <Button to="/register-interest" onClick={() => setMenuOpen(false)} className="mt-2">
               Register interest
             </Button>

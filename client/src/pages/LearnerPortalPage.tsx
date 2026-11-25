@@ -1,17 +1,20 @@
 import { useState, type FormEvent } from "react";
+import { Navigate } from "react-router-dom";
 import { Container } from "../components/Container";
 import { FormField } from "../components/FormField";
 import { PageHero } from "../components/PageHero";
 import { formContent, portalContent } from "../content";
 import { signIn } from "../lib/api";
+import { useAuth } from "../lib/auth";
 import { useDocumentTitle } from "../lib/useDocumentTitle";
 
 export function LearnerPortalPage() {
   useDocumentTitle(formContent.portalPageTitle);
+  const { user, setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -27,13 +30,16 @@ export function LearnerPortalPage() {
 
     setStatus("sending");
     try {
-      await signIn({ email: email.trim(), password });
-      setStatus("success");
+      const signedIn = await signIn({ email: email.trim(), password });
+      setUser(signedIn); // the redirect below takes over
     } catch (error) {
       setStatus("error");
       setErrorMessage(error instanceof Error ? error.message : portalContent.loginError);
     }
   }
+
+  // Already signed in (or just signed in): go to the right area.
+  if (user) return <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} replace />;
 
   return (
     <>
@@ -65,7 +71,6 @@ export function LearnerPortalPage() {
                 onChange={(event) => setPassword(event.target.value)}
               />
             </div>
-            {status === "success" && <p role="status" className="mt-5 rounded-lg border border-ok/30 bg-surface-2 p-3 text-sm text-ok">{portalContent.intro}</p>}
             {status === "error" && <p role="alert" className="mt-5 rounded-lg border border-bad/30 bg-surface-2 p-3 text-sm text-bad">{errorMessage}</p>}
             <button type="submit" disabled={status === "sending"} className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-lg bg-brand px-5 py-2.5 text-sm font-bold text-brand-fg transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:opacity-60">
               {status === "sending" ? formContent.sending : formContent.signIn}
