@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { z } from "zod";
 
 // Loads <repo root>/.env locally. On Vercel the dashboard variables are used instead.
-if (!process.env.VERCEL) {
+if (!process.env.VERCEL) { 
   dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
 }
 
