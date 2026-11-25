@@ -1,37 +1,37 @@
-import { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import { Layout } from "./components/Layout";
+import { ScrollToTop } from "./components/ScrollToTop";
+import { AboutPage } from "./pages/AboutPage";
+import { ContactPage } from "./pages/ContactPage";
+import { FAQPage } from "./pages/FAQPage";
+import { HomePage } from "./pages/HomePage";
+import { LearnerPortalPage } from "./pages/LearnerPortalPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { RegisterInterestPage } from "./pages/RegisterInterestPage";
+import { ServicesPage } from "./pages/ServicesPage";
+import { TrainingPage } from "./pages/TrainingPage";
 
 export default function App() {
-  const [api, setApi] = useState("checking...");
-
-  useEffect(() => {
-    fetch("/api/health")
-      .then((r) => r.json())
-      .then((d) => setApi(d.status))
-      .catch(() => setApi("unreachable"));
-  }, []);
-
-  function toggleTheme() {
-    const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem("workcraft-theme", next);
-    } catch {}
-  }
-
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-start justify-center gap-6 px-6">
-      <img src="/brand/logo-mark.png" alt="Workcraft logo" className="h-12 w-12" />
-      <h1 className="text-5xl font-bold">
-        Skills that turn into <span className="text-brand">real results</span>.
-      </h1>
-      <p className="text-muted">Setup check: API status is <b className="text-fg">{api}</b>.</p>
-      <img src="/images/hero-image.png" alt="" className="w-full rounded-2xl border border-line" />
-      <button
-        onClick={toggleTheme}
-        className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-brand-fg"
+    <Routes>
+      <Route
+        element={
+          <>
+            <ScrollToTop />
+            <Layout />
+          </>
+        }
       >
-        Toggle theme
-      </button>
-    </main>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/services" element={<ServicesPage />} />
+        <Route path="/training" element={<TrainingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/register-interest" element={<RegisterInterestPage />} />
+        <Route path="/learner-portal" element={<LearnerPortalPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
   );
 }
