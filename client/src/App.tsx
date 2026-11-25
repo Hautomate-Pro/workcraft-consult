@@ -1,8 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import { Layout } from "./components/Layout";
+import { RequireAuth } from "./components/RequireAuth";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { AboutPage } from "./pages/AboutPage";
+import { AdminPage } from "./pages/AdminPage";
 import { ContactPage } from "./pages/ContactPage";
+import { DashboardPage } from "./pages/DashboardPage";
 import { FAQPage } from "./pages/FAQPage";
 import { HomePage } from "./pages/HomePage";
 import { LearnerPortalPage } from "./pages/LearnerPortalPage";
@@ -30,6 +33,22 @@ export default function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/register-interest" element={<RegisterInterestPage />} />
         <Route path="/learner-portal" element={<LearnerPortalPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <DashboardPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth role="admin">
+              <AdminPage />
+            </RequireAuth>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
