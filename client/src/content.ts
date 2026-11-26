@@ -2,8 +2,8 @@ export const siteContent = {
   name: "Workcraft Consult",
   wordmark: "Workcraft",
   descriptor: "CONSULT",
-  email: "hello@workcraftconsult.com",
-  phone: "+234 800 000 0000",
+  email: "workcraftconsultltd@gmail.com",
+  phone: "+234 816 919 6774",
   location: "Lagos, Nigeria · Delivering globally online",
   description:
     "Workcraft Consult helps professionals and organisations grow through practical training, business and management consultancy, and digital learning solutions.",
